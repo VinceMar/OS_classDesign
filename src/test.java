@@ -1,16 +1,19 @@
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.Stack;
 
 public class test {
 
     public static void main(String[] args) {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(1);
-        stack.push(2);
-        stack.push(3);
-        stack.push(4);
-        stack.push(5);
-        System.out.println(stack);
-        stack.removeElement(3);
-        System.out.println(stack);
+        Set<String> set = new LinkedHashSet<>();
+        set.add("2");
+        set.add("1");
+        set.add("3");
+        System.out.println(set);
+        System.out.println(set.iterator().next());
+        set.remove(set.iterator().next());
+        System.out.println(set);
+        System.out.println(set.iterator().next());
     }
 }

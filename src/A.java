@@ -1,52 +1,35 @@
 import java.util.*;
 
 public class A {
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("产生指令序列");
-        produce_addstream(); // 初始化指令集
-        int k = 0; // 显示换行控制变量
-        for (int a : stream) {
-            System.out.print((k + 1) + ":" + a + "\t");
-            k++;
-            if (k % 10 == 0)
-                System.out.println();
-        }
 
-        // System.out.println("\r\n请选择页面置换算法 \r\n1、 最佳置换页面置换算法（OPT）\r\n" + "2、
-        // 最近最久未使用页面置换算法（LRU）\r\n"
-        // + "3、 First in first out algorithm\r\n" + "4、 最少使用页面置换算法（LFU）\r\n");
-        // int Num = sc.nextInt();
-        // switch (Num) {
-        // case 3:
-        // FIFO(3);
-        // break;
-        // case 2:
-        // LRU(3);
-        // break;
-        // case 1:
-        // OPT(3);
-        // break;
-        // case 4:
-        // LFU(3);
-        // break;
-        // default:
-        // System.out.println("there is not the algorithm in the program");
-        // break;
-        // }
-
-        // for(int i=2;i<32;i++) {
-        // System.out.println("---Msize="+i+"------");
-        // FIFO(i);
-        // LRU(i);
-        // OPT(i);
-        // LFU(i);
-        // }
-
-        // FIFO(3);
-        // OPT(3);
-        // LRUTest(3);
+        System.out.println("--------演示程序--------");
+        produce_addstream();
+        show(2);
         LFUTest(3);
+        LRUTest(3);
+        System.out.println("--------演示程序结束--------");
+
+        // try {
+        // System.out.println("--------正式程序--------");
+        // Thread.sleep(3000);
+        // System.out.println("产生指令序列");
+        // produce_addstream(); // 初始化指令集
+        // int k = 0; // 显示换行控制变量
+        // for (int a : stream) {
+        // System.out.print((k + 1) + ":" + a + "\t");
+        // k++;
+        // if (k % 10 == 0)
+        // System.out.println();
+        // }
+        // // LRU(3);
+        // // LFU(3);
+        // // FIFO(3);
+        // // OPT(3);
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
     }
 
     static List<Integer> stream, stream2;
@@ -56,6 +39,7 @@ public class A {
      */
     public static void produce_addstream() {
         stream = new ArrayList<>();
+        stream2 = new ArrayList<>();
         while (stream.size() != 320) {// 重复① ~ ⑤，直到执行320次指令。
             int m = (int) ((Math.random() * 319));// 起点 :在[0, 319]的指令地址之间随机选区一起点M；
             stream.add(m + 1);// 顺序执行一条指令，即执行地址为M+1的指令；
@@ -65,7 +49,6 @@ public class A {
             int m3 = (m2 + 2) + (int) (+Math.random() * (319 - m2 - 2));// 在后地址[M'+2, 319]中随机选取一条指令并执行；
             stream.add(m3);// 执行[m2+2,319]
         }
-        stream2 = new ArrayList<>();
         stream2.add(20);
         stream2.add(10);
         stream2.add(21);
@@ -73,13 +56,6 @@ public class A {
         stream2.add(22);
         stream2.add(30);
         stream2.add(40);
-        stream2.add(41);
-        stream2.add(32);
-        stream2.add(33);
-        stream2.add(34);
-        stream2.add(35);
-        stream2.add(50);
-        stream2.add(60);
     }
 
     /**
@@ -90,6 +66,27 @@ public class A {
      */
     public static int search(int zhiLing) {
         return zhiLing / 10;
+    }
+
+    public static void show(int mode) {
+        if (mode == 2) {
+            System.out.print("指令\t");
+            for (int i = 0; i < stream2.size(); i++) {
+                int zhiLing = stream2.get(i);
+                System.out.print(zhiLing + "\t");
+            }
+            System.out.println();
+            System.out.print("页面\t");
+            for (int i = 0; i < stream2.size(); i++) {
+                int zhiLing = stream2.get(i);
+                int yeMian = search(zhiLing);
+                System.out.print(yeMian + "\t");
+            }
+            System.out.println();
+        }
+        if (mode == 1) {
+
+        }
     }
 
     /**
@@ -258,29 +255,30 @@ public class A {
                 if (set.size() == Msize) {
                     int Min = -1;
                     for (int a : set) {
-                        for (int j = i - 1; j >= 0; j--) {
-                            if (search(stream.get(j)) == a) {
-                                temp[a] = j;
-                                break;
+                        for (int j = 0; j < i; j++) { // 遍历yeMian前的全部页面，若与当前set集合中的a相等，则对应temp[a]++(统计出现次数)
+                            int zhiLing1 = stream.get(j);
+                            int yeMian1 = search(zhiLing1);
+                            if (yeMian1 == a) {
+                                temp[a]++;
                             }
                         }
                     }
                     for (int a : set) {
                         if (Min == -1) {
                             Min = a;
-                            continue;
+                            continue; // 跳出此次循环，直接执行下次循环
                         }
-                        if (temp[a] < temp[Min]) {
+                        if (temp[a] < temp[Min]) { // 找出出现频率最低的页面
                             Min = a;
                         }
                     }
-                    set.remove(Min);// 移除该页面
+                    set.remove(Min);// 移除该页面（出现频率最低）
                     System.out.println("页面" + Min + "调出");
                 }
                 set.add(yeMian);
                 System.out.println("页面" + yeMian + "调入");
-                temp[yeMian]++;
             }
+            System.out.println("当前set集合" + set);
         }
         C -= Msize;
         Double c = 1 - (double) (C / 320);
@@ -290,13 +288,7 @@ public class A {
     public static void LFUTest(int Msize) {
         System.out.println("This is LFU Test");
         Double C = 0.0;// 未命中次数
-        Set<Integer> set = new HashSet<>();
-        for (int i = 0; i < stream2.size(); i++) {
-            int zhiLing = stream2.get(i);
-            int yeMian = search(zhiLing);
-            System.out.print(yeMian + "\t");
-        }
-        System.out.println();
+        Set<Integer> set = new LinkedHashSet<>();
         for (int i = 0; i < stream2.size(); i++) {
             int zhiLing = stream2.get(i);
             int yeMian = search(zhiLing);
@@ -308,10 +300,10 @@ public class A {
                 if (set.size() == Msize) {
                     int Min = -1;
                     for (int a : set) {
-                        for (int j = 0; j < i; j++) {   //遍历yeMian前的全部页面，若与当前set集合中的a相等，则对应temp[a]++(统计出现次数)
+                        for (int j = 0; j < i; j++) { // 遍历yeMian前的全部页面，若与当前set集合中的a相等，则对应temp[a]++(统计出现次数)
                             int zhiLing1 = stream2.get(j);
                             int yeMian1 = search(zhiLing1);
-                            if(yeMian1 == a){
+                            if (yeMian1 == a) {
                                 temp[a]++;
                             }
                         }
@@ -319,9 +311,9 @@ public class A {
                     for (int a : set) {
                         if (Min == -1) {
                             Min = a;
-                            continue;   //跳出此次循环，直接执行下次循环
+                            continue; // 跳出此次循环，直接执行下次循环
                         }
-                        if (temp[a] < temp[Min]) {  //找出出现频率最低的页面
+                        if (temp[a] < temp[Min]) { // 找出出现频率最低的页面
                             Min = a;
                         }
                     }
@@ -331,7 +323,7 @@ public class A {
                 set.add(yeMian);
                 System.out.println("页面" + yeMian + "调入");
             }
-            System.out.println("当前set集合"+set);
+            System.out.println("当前set:" + set);
         }
         C -= Msize;
         Double c = 1 - (double) (C / 320);
@@ -345,26 +337,20 @@ public class A {
         for (int i = 0; i < stream2.size(); i++) {
             int zhiLing = stream2.get(i);
             int yeMian = search(zhiLing);
-            System.out.print(yeMian + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i < stream2.size(); i++) {
-            int zhiLing = stream2.get(i);
-            int yeMian = search(zhiLing);
             if (stack.contains(yeMian)) {
                 System.out.println("指令" + zhiLing + "已在内存,页面为：" + yeMian);
-                stack.removeElement(yeMian);    //先移除再push进栈，提高其优先级
+                stack.removeElement(yeMian); // 先移除再push进栈，提高其优先级
                 stack.push(yeMian);
             } else {
                 C++;
                 if (stack.size() == Msize) {
                     System.out.println("页面" + stack.firstElement() + "调出");
-                    stack.remove(0);    //调出第一个最久未使用的页面
+                    stack.remove(0); // 调出第一个最久未使用的页面
                 }
                 stack.push(yeMian);
                 System.out.println("页面" + yeMian + "调入");
             }
-            System.out.println("此时栈内情况："+stack);
+            System.out.println("当前栈：" + stack);
         }
         C -= Msize;
         Double c = 1 - (double) (C / 320);
