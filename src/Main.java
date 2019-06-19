@@ -18,7 +18,11 @@ public class Main {
         init();
         LRU lru = new LRU(stream, 3);
         LFU lfu = new LFU(stream, 3);
+        FIFO fifo = new FIFO(stream, 3);
+        OPT opt = new OPT(stream, 3);
         // lru.calHitRate();
-        lfu.calHitRate();
+        // lfu.calHitRate();
+        // fifo.calHitRate();
+        // opt.calHitRate();
     }
 }
