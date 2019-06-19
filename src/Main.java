@@ -8,8 +8,8 @@ public class Main {
      * 初始化指令集
      */
     public static void init() {
-        stream = new ArrayList<>();     //测试用，便于看效果
-        stream2 = new ArrayList<>();    //题目要求
+        stream = new ArrayList<>(); // 测试用，便于看效果
+        stream2 = new ArrayList<>(); // 题目要求
         stream.add(20);
         stream.add(10);
         stream.add(21);
@@ -37,7 +37,7 @@ public class Main {
         for (int i = 0; i < stream.size(); i++) {
             int zhiLing = stream.get(i);
             System.out.print(zhiLing + "\t");
-            if ((i+1) % 10 == 0 && i != 0) {
+            if ((i + 1) % 10 == 0 && i != 0) {
                 System.out.println();
             }
         }
@@ -48,7 +48,7 @@ public class Main {
             int zhiLing = stream.get(i);
             int yeMian = zhiLing / 10;
             System.out.print(yeMian + "\t");
-            if ((i+1) % 10 == 0 && i != 0) {
+            if ((i + 1) % 10 == 0 && i != 0) {
                 System.out.println();
             }
         }
@@ -58,14 +58,16 @@ public class Main {
     public static void main(String[] args) {
         init();
         List<Integer> s = stream;
-        show(s);
+        // show(s);
         LRU lru = new LRU(s, 3);
         LFU lfu = new LFU(s, 3);
         FIFO fifo = new FIFO(s, 3);
         OPT opt = new OPT(s, 3);
-        lru.calHitRate();
-        lfu.calHitRate();
+        CLOCK clock = new CLOCK(s, 3);
+        // lru.calHitRate();
+        // lfu.calHitRate();
         // fifo.calHitRate();
         // opt.calHitRate();
+        clock.process();
     }
 }
