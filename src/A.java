@@ -43,7 +43,7 @@ public class A {
         // }
 
         // FIFO(3);
-        OPT(3);
+        // OPT(3);
         LRU(3);
         LFU(3);
     }
@@ -116,7 +116,7 @@ public class A {
     }
 
     /**
-     * 最近最久未使用算法
+     * 最近最久未使用算法 淘汰最长时间未被使用的页面
      * 
      * @param Msize 物理块
      */
@@ -124,18 +124,30 @@ public class A {
         System.out.println("This is LRU");
         Stack<Integer> stack = new Stack<>();
         Double C = 0.0;// 未命中次数
+        int k = 0;
+        for (int i = 0; i < stream.size(); i++) {
+            int zhiLing = stream.get(i);
+            int yeMian = search(zhiLing);
+            System.out.print(yeMian + "\t");
+            if ((i + 1) % 10 == 0)
+                System.out.println();
+        }
         for (int i = 0; i < stream.size(); i++) {
             int zhiLing = stream.get(i);
             int yeMian = search(zhiLing);
             if (stack.contains(yeMian)) {
+                k++;
+                System.out.println("指令" + zhiLing + "已在内存,对应页面：" + yeMian);
                 stack.removeElement(yeMian);
                 stack.push(yeMian);
             } else {
                 C++;
                 if (stack.size() == Msize) {
                     stack.removeElement(stack.firstElement());
+                    System.out.println("页面"+stack.firstElement()+"调出");
                 }
                 stack.push(yeMian);
+                System.out.println("页面"+yeMian+"调入");
             }
         }
         C -= Msize;
@@ -169,26 +181,27 @@ public class A {
             } else {
                 C++;
                 if (set.size() == Msize) {
-                    int max = -1;// 最长时间不会使用的指令的页面
-                    int[] temp = new int[32];
+                    int max = -1;               //最长时间不会使用的指令的页面
+                    int[] temp = new int[32];   //空数组用于保存
                     for (int a : set) {
                         for (int j = i + 1; j < stream.size(); j++) {
-                            if (search(stream.get(j)) == a) {
-                                temp[a] = j;
+                            if (search(stream.get(j)) == a) {   //找到与当前页面相等的页面
+                                temp[a] = j;    //保存到数组对应位置
                                 break;
                             }
                         }
                     }
-                    for (int a : set) {
+                    for (int a : set) { //找出数组中最晚出现的
                         if (max == -1)
                             max = a;
-                        if (temp[a] == 0) {
-                            set.remove(a);
+                        if (temp[a] == 0) {     //该页面后续不再出现（数组中未保存该页面的后续页面位置）
+                            set.remove(a);      //直接调出
+                            System.out.println("a:"+a);
                             System.out.println("页面" + a + "调出");
                             break;
                         }
                         if (temp[a] > temp[max])
-                            max = a;
+                            max = a;    //max用于保存数组最靠后的位置
                     }
                     if (set.size() == Msize) {
                         set.remove(max);// 移除该页面
@@ -205,7 +218,7 @@ public class A {
     }
 
     /**
-     * 最少使用置换算法
+     * 最少使用置换算法 淘汰一定时期内被访问次数最少的页
      * 
      * @param Msize
      */
