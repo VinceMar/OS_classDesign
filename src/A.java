@@ -44,7 +44,7 @@ public class A {
 
         // FIFO(3);
         // OPT(3);
-        LRU(3);
+        // LRU(3);
         LFU(3);
     }
 
@@ -229,9 +229,16 @@ public class A {
         for (int i = 0; i < stream.size(); i++) {
             int zhiLing = stream.get(i);
             int yeMian = search(zhiLing);
+            System.out.print(yeMian + "\t");
+            if ((i + 1) % 10 == 0)
+                System.out.println();
+        }
+        for (int i = 0; i < stream.size(); i++) {
+            int zhiLing = stream.get(i);
+            int yeMian = search(zhiLing);
             int[] temp = new int[32];
             if (set.contains(yeMian)) {
-
+                System.out.println("指令" + zhiLing + "已在内存,对应页面：" + yeMian);
             } else {
                 C++;
                 if (set.size() == Msize) {
@@ -254,8 +261,10 @@ public class A {
                         }
                     }
                     set.remove(Min);// 移除该页面
+                    System.out.println("页面"+Min+"调出");
                 }
                 set.add(yeMian);
+                System.out.println("页面"+yeMian+"调入");
                 temp[yeMian]++;
             }
         }
