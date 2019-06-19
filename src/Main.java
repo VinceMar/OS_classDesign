@@ -57,14 +57,14 @@ public class Main {
 
     public static void main(String[] args) {
         init();
-        List<Integer> s = stream2;
+        List<Integer> s = stream;
         show(s);
         LRU lru = new LRU(s, 3);
         LFU lfu = new LFU(s, 3);
         FIFO fifo = new FIFO(s, 3);
         OPT opt = new OPT(s, 3);
-        // lru.calHitRate();
-        // lfu.calHitRate();
+        lru.calHitRate();
+        lfu.calHitRate();
         // fifo.calHitRate();
         // opt.calHitRate();
     }
