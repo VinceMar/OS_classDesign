@@ -1,220 +1,253 @@
 import java.util.*;
 
-
 public class A {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("²úÉúÖ¸ÁîĞòÁĞ");
-        produce_addstream();	//³õÊ¼»¯Ö¸Áî¼¯
-        int k = 0;	//ÏÔÊ¾»»ĞĞ¿ØÖÆ±äÁ¿
-        for(int a:stream) {
-            System.out.print((k+1)+":"+a+"\t");
+        System.out.println("äº§ç”ŸæŒ‡ä»¤åºåˆ—");
+        produce_addstream(); // åˆå§‹åŒ–æŒ‡ä»¤é›†
+        int k = 0; // æ˜¾ç¤ºæ¢è¡Œæ§åˆ¶å˜é‡
+        for (int a : stream) {
+            System.out.print((k + 1) + ":" + a + "\t");
             k++;
-            if(k%10 == 0)
-            	System.out.println();
+            if (k % 10 == 0)
+                System.out.println();
         }
-        
-        System.out.println("\r\nÇëÑ¡ÔñÒ³ÃæÖÃ»»Ëã·¨ \r\n1¡¢ ×î¼ÑÖÃ»»Ò³ÃæÖÃ»»Ëã·¨£¨OPT£©\r\n" + 
-                "2¡¢ ×î½ü×î¾ÃÎ´Ê¹ÓÃÒ³ÃæÖÃ»»Ëã·¨£¨LRU£©\r\n" + 
-                "3¡¢ First in first out algorithm\r\n" + 
-                "4¡¢ ×îÉÙÊ¹ÓÃÒ³ÃæÖÃ»»Ëã·¨£¨LFU£©\r\n");
-        int Num = sc.nextInt();
-        switch(Num) {
-        case 3:
-            FIFO(3);
-            break;
-        case 2:
-            LRU(3);
-            break;
-        case 1:
-            OPT(3);
-            break;
-        case 4:
-            LFU(3);
-            break;
-        default:
-            System.out.println("there is not the algorithm in the program");
-            break;
-        }
-        
-//        for(int i=2;i<32;i++) {
-//            System.out.println("---Msize="+i+"------");
-//            FIFO(i);
-//            LRU(i);
-//            OPT(i);
-//            LFU(i);
-//        }
+
+        // System.out.println("\r\nè¯·é€‰æ‹©é¡µé¢ç½®æ¢ç®—æ³• \r\n1ã€ æœ€ä½³ç½®æ¢é¡µé¢ç½®æ¢ç®—æ³•ï¼ˆOPTï¼‰\r\n" + "2ã€ æœ€è¿‘æœ€ä¹…æœªä½¿ç”¨é¡µé¢ç½®æ¢ç®—æ³•ï¼ˆLRUï¼‰\r\n"
+        //         + "3ã€ First in first out algorithm\r\n" + "4ã€ æœ€å°‘ä½¿ç”¨é¡µé¢ç½®æ¢ç®—æ³•ï¼ˆLFUï¼‰\r\n");
+        // int Num = sc.nextInt();
+        // switch (Num) {
+        // case 3:
+        //     FIFO(3);
+        //     break;
+        // case 2:
+        //     LRU(3);
+        //     break;
+        // case 1:
+        //     OPT(3);
+        //     break;
+        // case 4:
+        //     LFU(3);
+        //     break;
+        // default:
+        //     System.out.println("there is not the algorithm in the program");
+        //     break;
+        // }
+
+        // for(int i=2;i<32;i++) {
+        // System.out.println("---Msize="+i+"------");
+        // FIFO(i);
+        // LRU(i);
+        // OPT(i);
+        // LFU(i);
+        // }
+
+        // FIFO(3);
+        OPT(3);
+        LRU(3);
+        LFU(3);
     }
+
     static List<Integer> stream;
+
     /**
-     * @return ²úÉúÖ¸ÁîĞòÁĞstream
+     * @return äº§ç”ŸæŒ‡ä»¤åºåˆ—stream
      */
-    public static void produce_addstream(){
-        stream=new ArrayList<>();
-        while(stream.size()!=320) {//ÖØ¸´¢Ù ~ ¢İ£¬Ö±µ½Ö´ĞĞ320´ÎÖ¸Áî¡£
-            int m = (int)((Math.random()*319));//Æğµã	:ÔÚ[0, 319]µÄÖ¸ÁîµØÖ·Ö®¼äËæ»úÑ¡ÇøÒ»ÆğµãM£»
-            stream.add(m+1);//Ë³ĞòÖ´ĞĞÒ»ÌõÖ¸Áî£¬¼´Ö´ĞĞµØÖ·ÎªM+1µÄÖ¸Áî£»
-            int m2 = (int)((Math.random()*(m+1)));	//ÔÚÇ°µØÖ·[0, M+1]ÖĞËæ»úÑ¡È¡Ò»ÌõÖ¸Áî²¢Ö´ĞĞ£¬¸ÃÖ¸ÁîµÄµØÖ·ÎªM'£»
-            stream.add(m2);//Ö´ĞĞm2
-            stream.add(m2+1);//Ë³ĞòÖ´ĞĞÒ»ÌõÖ¸Áî£¬ÆäµØÖ·ÎªM'+1£»
-            int m3 = (m2+2)+(int)(+Math.random()*(319-m2-2));//ÔÚºóµØÖ·[M'+2, 319]ÖĞËæ»úÑ¡È¡Ò»ÌõÖ¸Áî²¢Ö´ĞĞ£»
-            stream.add(m3);//Ö´ĞĞ[m2+2,319]
-        }	
+    public static void produce_addstream() {
+        stream = new ArrayList<>();
+        while (stream.size() != 320) {// é‡å¤â‘  ~ â‘¤ï¼Œç›´åˆ°æ‰§è¡Œ320æ¬¡æŒ‡ä»¤ã€‚
+            int m = (int) ((Math.random() * 319));// èµ·ç‚¹ :åœ¨[0, 319]çš„æŒ‡ä»¤åœ°å€ä¹‹é—´éšæœºé€‰åŒºä¸€èµ·ç‚¹Mï¼›
+            stream.add(m + 1);// é¡ºåºæ‰§è¡Œä¸€æ¡æŒ‡ä»¤ï¼Œå³æ‰§è¡Œåœ°å€ä¸ºM+1çš„æŒ‡ä»¤ï¼›
+            int m2 = (int) ((Math.random() * (m + 1))); // åœ¨å‰åœ°å€[0, M+1]ä¸­éšæœºé€‰å–ä¸€æ¡æŒ‡ä»¤å¹¶æ‰§è¡Œï¼Œè¯¥æŒ‡ä»¤çš„åœ°å€ä¸ºM'ï¼›
+            stream.add(m2);// æ‰§è¡Œm2
+            stream.add(m2 + 1);// é¡ºåºæ‰§è¡Œä¸€æ¡æŒ‡ä»¤ï¼Œå…¶åœ°å€ä¸ºM'+1ï¼›
+            int m3 = (m2 + 2) + (int) (+Math.random() * (319 - m2 - 2));// åœ¨ååœ°å€[M'+2, 319]ä¸­éšæœºé€‰å–ä¸€æ¡æŒ‡ä»¤å¹¶æ‰§è¡Œï¼›
+            stream.add(m3);// æ‰§è¡Œ[m2+2,319]
+        }
     }
+
     /**
-     * ¸ù¾İÖ¸ÁîÊıÕÒµ½Ò³Ãæ
-     * @param zhiLing ËùĞèÖ¸Áî
-     * @return Ö¸ÁîËùÔÚÒ³Ãæ
+     * æ ¹æ®æŒ‡ä»¤æ•°æ‰¾åˆ°é¡µé¢
+     * 
+     * @param zhiLing æ‰€éœ€æŒ‡ä»¤
+     * @return æŒ‡ä»¤æ‰€åœ¨é¡µé¢
      */
     public static int search(int zhiLing) {
-        return zhiLing/10;
+        return zhiLing / 10;
     }
+
     /**
-     * ÏÈ½øÏÈ³ö
-     * @param Msize ÎïÀí¿éÊı
+     * å…ˆè¿›å…ˆå‡º
+     * 
+     * @param Msize ç‰©ç†å—æ•°
      */
     public static void FIFO(int Msize) {
+        System.out.println("This is FIFO");
         Queue<Integer> que = new LinkedList<>();
-        Double C = 0.0;//Î´ÃüÖĞ´ÎÊı
-        for(int i=0;i<stream.size();i++) {
+        Double C = 0.0;// æœªå‘½ä¸­æ¬¡æ•°
+        for (int i = 0; i < stream.size(); i++) {
             int zhiLing = stream.get(i);
             int yeMian = search(zhiLing);
-            System.out.print(yeMian+"\t");
-            if((i+1)%10==0)
-            	System.out.println();
-        }
-        for(int i=0;i<stream.size();i++) {
-            int zhiLing = stream.get(i);
-            int yeMian = search(zhiLing);
-            if(que.contains(yeMian)) {
-                //ÎŞĞè²Ù×÷
-            	System.out.println("Ö¸Áî"+zhiLing+"¶ÔÓ¦Ò³Ãæ"+yeMian+"ÒÑÔÚÄÚ´æ");
-            }else {
-                C++;
-                System.out.println("C:"+C);
-                if(que.size()==Msize) {
-                    que.poll();	//½«×îÏÈ½øÈëµÄµ¯³ö
-                    System.out.println("Ò³Ãæ"+yeMian+"±»µ÷³ö£¬Ö¸ÁîÎª"+zhiLing);
-                }
-                que.offer(yeMian);	//È±Ò³£¬½«Ò³Ãæµ÷ÈëÄÚ´æ
+            System.out.print(yeMian + "\t");
+            if ((i + 1) % 10 == 0)
                 System.out.println();
+        }
+        int k = 0;
+        for (int i = 0; i < stream.size(); i++) {
+            int zhiLing = stream.get(i);
+            int yeMian = search(zhiLing);
+            if (que.contains(yeMian)) {
+                // æ— éœ€æ“ä½œ
+                k++;
+                System.out.println("æŒ‡ä»¤" + zhiLing + "å·²åœ¨å†…å­˜ï¼Œå¯¹åº”é¡µé¢ï¼š"+yeMian);
+            } else {
+                C++;
+                if (que.size() == Msize) {
+                    int pop = que.poll(); // å°†æœ€å…ˆè¿›å…¥çš„å¼¹å‡º
+                    System.out.println("é¡µé¢" + pop + "å¼¹å‡º");
+                }
+                que.offer(yeMian);
+                System.out.println("é¡µé¢" + yeMian + "è°ƒå…¥");
             }
         }
-        C-=Msize;
-        Double c = 1-(double) (C/320);
-        System.out.println("FIFO: "+String.format("%.6f",c)+"   Msize : "+Msize);
+        C -= Msize;
+        Double c = 1 - (double) (C / 320);
+        System.out.println("FIFO: " + String.format("%.6f", c) + "   Msize : " + Msize);
     }
+
     /**
-     * ×î½ü×î¾ÃÎ´Ê¹ÓÃËã·¨
-     * @param Msize ÎïÀí¿é
+     * æœ€è¿‘æœ€ä¹…æœªä½¿ç”¨ç®—æ³•
+     * 
+     * @param Msize ç‰©ç†å—
      */
     public static void LRU(int Msize) {
+        System.out.println("This is LRU");
         Stack<Integer> stack = new Stack<>();
-        Double C = 0.0;//Î´ÃüÖĞ´ÎÊı
-        for(int i=0;i<stream.size();i++) {
+        Double C = 0.0;// æœªå‘½ä¸­æ¬¡æ•°
+        for (int i = 0; i < stream.size(); i++) {
             int zhiLing = stream.get(i);
             int yeMian = search(zhiLing);
-            if(stack.contains(yeMian)) {
+            if (stack.contains(yeMian)) {
                 stack.removeElement(yeMian);
                 stack.push(yeMian);
-            }else {
+            } else {
                 C++;
-                if(stack.size()==Msize) {
+                if (stack.size() == Msize) {
                     stack.removeElement(stack.firstElement());
                 }
                 stack.push(yeMian);
             }
         }
-        C-=Msize;
-        Double c = 1-(double) (C/320);
-        System.out.println("LRU : "+String.format("%.6f",c)+"   Msize : "+Msize);
+        C -= Msize;
+        Double c = 1 - (double) (C / 320);
+        System.out.println("LRU : " + String.format("%.6f", c) + "   Msize : " + Msize);
     }
+
     /**
-     * ×î¼ÑÖÃ»»Ëã·¨
-     * @param Msize ÎïÀí¿é
+     * æœ€ä½³ç½®æ¢ç®—æ³•
+     * 
+     * @param Msize ç‰©ç†å—
      */
     public static void OPT(int Msize) {
-        Double C = 0.0;//Î´ÃüÖĞ´ÎÊı
-        Set<Integer> set = new HashSet<>();
-        for(int i=0;i<stream.size();i++) {
+        System.out.println("This is OPT");
+        Double C = 0.0;// æœªå‘½ä¸­æ¬¡æ•°
+        Set<Integer> set = new HashSet<>(); // ç”¨äºå­˜å‚¨æ— åº(å­˜å…¥å’Œå–å‡ºçš„é¡ºåºä¸ä¸€å®šç›¸åŒ)å…ƒç´ ï¼Œå€¼ä¸èƒ½é‡å¤
+        int k = 0;
+        for (int i = 0; i < stream.size(); i++) {
             int zhiLing = stream.get(i);
             int yeMian = search(zhiLing);
-            if(set.contains(yeMian)) {
-                
-            }else {
+            System.out.print(yeMian + "\t");
+            if ((i + 1) % 10 == 0)
+                System.out.println();
+        }
+        for (int i = 0; i < stream.size(); i++) {
+            int zhiLing = stream.get(i);
+            int yeMian = search(zhiLing);
+            if (set.contains(yeMian)) {
+                k++;
+                System.out.println("æŒ‡ä»¤" + zhiLing + "å·²åœ¨å†…å­˜,å¯¹åº”é¡µé¢ï¼š"+yeMian);
+            } else {
                 C++;
-                if(set.size()==Msize) {
-                    int max = -1;//×î³¤Ê±¼ä²»»áÊ¹ÓÃµÄÖ¸ÁîµÄÒ³Ãæ
+                if (set.size() == Msize) {
+                    int max = -1;// æœ€é•¿æ—¶é—´ä¸ä¼šä½¿ç”¨çš„æŒ‡ä»¤çš„é¡µé¢
                     int[] temp = new int[32];
-                    for(int a:set) {
-                        for(int j=i+1;j<stream.size();j++) {
-                            if(search(stream.get(j))==a) {
-                                temp[a]=j;
+                    for (int a : set) {
+                        for (int j = i + 1; j < stream.size(); j++) {
+                            if (search(stream.get(j)) == a) {
+                                temp[a] = j;
                                 break;
                             }
                         }
                     }
-                    for(int a:set) {
-                        if(max==-1) max=a;
-                        if(temp[a]==0) {
+                    for (int a : set) {
+                        if (max == -1)
+                            max = a;
+                        if (temp[a] == 0) {
                             set.remove(a);
+                            System.out.println("é¡µé¢" + a + "è°ƒå‡º");
                             break;
                         }
-                        if(temp[a]>temp[max]) max=a;
+                        if (temp[a] > temp[max])
+                            max = a;
                     }
-                    if(set.size()==Msize) {
-                        set.remove(max);//ÒÆ³ı¸ÃÒ³Ãæ
+                    if (set.size() == Msize) {
+                        set.remove(max);// ç§»é™¤è¯¥é¡µé¢
+                        System.out.println("é¡µé¢"+max+"è°ƒå‡º");
                     }
                 }
                 set.add(yeMian);
+                System.out.println("é¡µé¢"+yeMian+"è°ƒå…¥");
             }
         }
-        C-=Msize;
-        Double c = 1-(double) (C/320);
-        System.out.println("OPT : "+String.format("%.6f",c)+"   Msize : "+Msize);
+        C -= Msize;
+        Double c = 1 - (double) (C / 320);
+        System.out.println("OPT : " + String.format("%.6f", c) + "   Msize : " + Msize);
     }
+
     /**
-     * ×îÉÙÊ¹ÓÃÖÃ»»Ëã·¨
+     * æœ€å°‘ä½¿ç”¨ç½®æ¢ç®—æ³•
+     * 
      * @param Msize
      */
     public static void LFU(int Msize) {
-        Double C = 0.0;//Î´ÃüÖĞ´ÎÊı
+        System.out.println("This is LFU");
+        Double C = 0.0;// æœªå‘½ä¸­æ¬¡æ•°
         Set<Integer> set = new HashSet<>();
-        for(int i=0;i<stream.size();i++) {
+        for (int i = 0; i < stream.size(); i++) {
             int zhiLing = stream.get(i);
             int yeMian = search(zhiLing);
             int[] temp = new int[32];
-            if(set.contains(yeMian)) {
-                
-            }else {
+            if (set.contains(yeMian)) {
+
+            } else {
                 C++;
-                if(set.size()==Msize) {
+                if (set.size() == Msize) {
                     int Min = -1;
-                    for(int a:set) {
-                        for(int j=i-1;j>=0;j--) {
-                            if(search(stream.get(j))==a) {
-                                temp[a]=j;
+                    for (int a : set) {
+                        for (int j = i - 1; j >= 0; j--) {
+                            if (search(stream.get(j)) == a) {
+                                temp[a] = j;
                                 break;
                             }
                         }
                     }
-                    for(int a:set) {
-                        if(Min==-1) {
-                            Min=a;
+                    for (int a : set) {
+                        if (Min == -1) {
+                            Min = a;
                             continue;
                         }
-                        if(temp[a]<temp[Min]) {
-                            Min=a;
+                        if (temp[a] < temp[Min]) {
+                            Min = a;
                         }
                     }
-                    set.remove(Min);//ÒÆ³ı¸ÃÒ³Ãæ
+                    set.remove(Min);// ç§»é™¤è¯¥é¡µé¢
                 }
                 set.add(yeMian);
                 temp[yeMian]++;
             }
         }
-        C-=Msize;
-        Double c = 1-(double) (C/320);
-        System.out.println("LFU : "+String.format("%.6f",c)+"   Msize : "+Msize);
+        C -= Msize;
+        Double c = 1 - (double) (C / 320);
+        System.out.println("LFU : " + String.format("%.6f", c) + "   Msize : " + Msize);
     }
 }
