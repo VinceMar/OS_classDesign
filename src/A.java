@@ -13,25 +13,26 @@ public class A {
                 System.out.println();
         }
 
-        // System.out.println("\r\n请选择页面置换算法 \r\n1、 最佳置换页面置换算法（OPT）\r\n" + "2、 最近最久未使用页面置换算法（LRU）\r\n"
-        //         + "3、 First in first out algorithm\r\n" + "4、 最少使用页面置换算法（LFU）\r\n");
+        // System.out.println("\r\n请选择页面置换算法 \r\n1、 最佳置换页面置换算法（OPT）\r\n" + "2、
+        // 最近最久未使用页面置换算法（LRU）\r\n"
+        // + "3、 First in first out algorithm\r\n" + "4、 最少使用页面置换算法（LFU）\r\n");
         // int Num = sc.nextInt();
         // switch (Num) {
         // case 3:
-        //     FIFO(3);
-        //     break;
+        // FIFO(3);
+        // break;
         // case 2:
-        //     LRU(3);
-        //     break;
+        // LRU(3);
+        // break;
         // case 1:
-        //     OPT(3);
-        //     break;
+        // OPT(3);
+        // break;
         // case 4:
-        //     LFU(3);
-        //     break;
+        // LFU(3);
+        // break;
         // default:
-        //     System.out.println("there is not the algorithm in the program");
-        //     break;
+        // System.out.println("there is not the algorithm in the program");
+        // break;
         // }
 
         // for(int i=2;i<32;i++) {
@@ -44,11 +45,11 @@ public class A {
 
         // FIFO(3);
         // OPT(3);
-        // LRU(3);
-        LFU(3);
+        // LRUTest(3);
+        LFUTest(3);
     }
 
-    static List<Integer> stream;
+    static List<Integer> stream, stream2;
 
     /**
      * @return 产生指令序列stream
@@ -64,6 +65,21 @@ public class A {
             int m3 = (m2 + 2) + (int) (+Math.random() * (319 - m2 - 2));// 在后地址[M'+2, 319]中随机选取一条指令并执行；
             stream.add(m3);// 执行[m2+2,319]
         }
+        stream2 = new ArrayList<>();
+        stream2.add(20);
+        stream2.add(10);
+        stream2.add(21);
+        stream2.add(11);
+        stream2.add(22);
+        stream2.add(30);
+        stream2.add(40);
+        stream2.add(41);
+        stream2.add(32);
+        stream2.add(33);
+        stream2.add(34);
+        stream2.add(35);
+        stream2.add(50);
+        stream2.add(60);
     }
 
     /**
@@ -99,7 +115,7 @@ public class A {
             if (que.contains(yeMian)) {
                 // 无需操作
                 k++;
-                System.out.println("指令" + zhiLing + "已在内存，对应页面："+yeMian);
+                System.out.println("指令" + zhiLing + "已在内存，对应页面：" + yeMian);
             } else {
                 C++;
                 if (que.size() == Msize) {
@@ -124,7 +140,6 @@ public class A {
         System.out.println("This is LRU");
         Stack<Integer> stack = new Stack<>();
         Double C = 0.0;// 未命中次数
-        int k = 0;
         for (int i = 0; i < stream.size(); i++) {
             int zhiLing = stream.get(i);
             int yeMian = search(zhiLing);
@@ -136,18 +151,17 @@ public class A {
             int zhiLing = stream.get(i);
             int yeMian = search(zhiLing);
             if (stack.contains(yeMian)) {
-                k++;
                 System.out.println("指令" + zhiLing + "已在内存,对应页面：" + yeMian);
                 stack.removeElement(yeMian);
                 stack.push(yeMian);
             } else {
                 C++;
                 if (stack.size() == Msize) {
-                    stack.removeElement(stack.firstElement());
-                    System.out.println("页面"+stack.firstElement()+"调出");
+                    System.out.println("页面" + stack.firstElement() + "调出");
+                    stack.remove(0); // 调出第一个最久未使用的页面
                 }
                 stack.push(yeMian);
-                System.out.println("页面"+yeMian+"调入");
+                System.out.println("页面" + yeMian + "调入");
             }
         }
         C -= Msize;
@@ -177,39 +191,39 @@ public class A {
             int yeMian = search(zhiLing);
             if (set.contains(yeMian)) {
                 k++;
-                System.out.println("指令" + zhiLing + "已在内存,对应页面："+yeMian);
+                System.out.println("指令" + zhiLing + "已在内存,对应页面：" + yeMian);
             } else {
                 C++;
                 if (set.size() == Msize) {
-                    int max = -1;               //最长时间不会使用的指令的页面
-                    int[] temp = new int[32];   //空数组用于保存
+                    int max = -1; // 最长时间不会使用的指令的页面
+                    int[] temp = new int[32]; // 空数组用于保存
                     for (int a : set) {
                         for (int j = i + 1; j < stream.size(); j++) {
-                            if (search(stream.get(j)) == a) {   //找到与当前页面相等的页面
-                                temp[a] = j;    //保存到数组对应位置
+                            if (search(stream.get(j)) == a) { // 找到与当前页面相等的页面
+                                temp[a] = j; // 保存到数组对应位置
                                 break;
                             }
                         }
                     }
-                    for (int a : set) { //找出数组中最晚出现的
+                    for (int a : set) { // 找出数组中最晚出现的
                         if (max == -1)
                             max = a;
-                        if (temp[a] == 0) {     //该页面后续不再出现（数组中未保存该页面的后续页面位置）
-                            set.remove(a);      //直接调出
-                            System.out.println("a:"+a);
+                        if (temp[a] == 0) { // 该页面后续不再出现（数组中未保存该页面的后续页面位置）
+                            set.remove(a); // 直接调出
+                            System.out.println("a:" + a);
                             System.out.println("页面" + a + "调出");
                             break;
                         }
                         if (temp[a] > temp[max])
-                            max = a;    //max用于保存数组最靠后的位置
+                            max = a; // max用于保存数组最靠后的位置
                     }
                     if (set.size() == Msize) {
                         set.remove(max);// 移除该页面
-                        System.out.println("页面"+max+"调出");
+                        System.out.println("页面" + max + "调出");
                     }
                 }
                 set.add(yeMian);
-                System.out.println("页面"+yeMian+"调入");
+                System.out.println("页面" + yeMian + "调入");
             }
         }
         C -= Msize;
@@ -261,10 +275,10 @@ public class A {
                         }
                     }
                     set.remove(Min);// 移除该页面
-                    System.out.println("页面"+Min+"调出");
+                    System.out.println("页面" + Min + "调出");
                 }
                 set.add(yeMian);
-                System.out.println("页面"+yeMian+"调入");
+                System.out.println("页面" + yeMian + "调入");
                 temp[yeMian]++;
             }
         }
@@ -272,4 +286,89 @@ public class A {
         Double c = 1 - (double) (C / 320);
         System.out.println("LFU : " + String.format("%.6f", c) + "   Msize : " + Msize);
     }
+
+    public static void LFUTest(int Msize) {
+        System.out.println("This is LFU Test");
+        Double C = 0.0;// 未命中次数
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < stream2.size(); i++) {
+            int zhiLing = stream2.get(i);
+            int yeMian = search(zhiLing);
+            System.out.print(yeMian + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i < stream2.size(); i++) {
+            int zhiLing = stream2.get(i);
+            int yeMian = search(zhiLing);
+            int[] temp = new int[32];
+            if (set.contains(yeMian)) {
+                System.out.println("指令" + zhiLing + "已在内存,对应页面：" + yeMian);
+            } else {
+                C++;
+                if (set.size() == Msize) {
+                    int Min = -1;
+                    for (int a : set) {
+                        for (int j = 0; j < i; j++) {   //遍历yeMian前的全部页面，若与当前set集合中的a相等，则对应temp[a]++(统计出现次数)
+                            int zhiLing1 = stream2.get(j);
+                            int yeMian1 = search(zhiLing1);
+                            if(yeMian1 == a){
+                                temp[a]++;
+                            }
+                        }
+                    }
+                    for (int a : set) {
+                        if (Min == -1) {
+                            Min = a;
+                            continue;   //跳出此次循环，直接执行下次循环
+                        }
+                        if (temp[a] < temp[Min]) {  //找出出现频率最低的页面
+                            Min = a;
+                        }
+                    }
+                    set.remove(Min);// 移除该页面（出现频率最低）
+                    System.out.println("页面" + Min + "调出");
+                }
+                set.add(yeMian);
+                System.out.println("页面" + yeMian + "调入");
+            }
+            System.out.println("当前set集合"+set);
+        }
+        C -= Msize;
+        Double c = 1 - (double) (C / 320);
+        System.out.println("LFU : " + String.format("%.6f", c) + "   Msize : " + Msize);
+    }
+
+    public static void LRUTest(int Msize) {
+        System.out.println("---------This is LRU Test----------");
+        Stack<Integer> stack = new Stack<>();
+        Double C = 0.0;// 未命中次数
+        for (int i = 0; i < stream2.size(); i++) {
+            int zhiLing = stream2.get(i);
+            int yeMian = search(zhiLing);
+            System.out.print(yeMian + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i < stream2.size(); i++) {
+            int zhiLing = stream2.get(i);
+            int yeMian = search(zhiLing);
+            if (stack.contains(yeMian)) {
+                System.out.println("指令" + zhiLing + "已在内存,页面为：" + yeMian);
+                stack.removeElement(yeMian);    //先移除再push进栈，提高其优先级
+                stack.push(yeMian);
+            } else {
+                C++;
+                if (stack.size() == Msize) {
+                    System.out.println("页面" + stack.firstElement() + "调出");
+                    stack.remove(0);    //调出第一个最久未使用的页面
+                }
+                stack.push(yeMian);
+                System.out.println("页面" + yeMian + "调入");
+            }
+            System.out.println("此时栈内情况："+stack);
+        }
+        C -= Msize;
+        Double c = 1 - (double) (C / 320);
+        System.out.println("LRU : " + String.format("%.6f", c) + "   Msize : " + Msize);
+    }
+
 }
