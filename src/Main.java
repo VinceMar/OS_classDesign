@@ -17,6 +17,9 @@ public class Main {
         stream.add(22);
         stream.add(30);
         stream.add(40);
+        stream.add(50);
+        stream.add(60);
+        stream.add(70);
         while (stream2.size() != 320) {// 重复① ~ ⑤，直到执行320次指令。
             int m = (int) ((Math.random() * 319));// 起点 :在[0, 319]的指令地址之间随机选区一起点M；
             stream2.add(m + 1);// 顺序执行一条指令，即执行地址为M+1的指令；
@@ -68,6 +71,6 @@ public class Main {
         // lfu.calHitRate();
         // fifo.calHitRate();
         // opt.calHitRate();
-        clock.process();
+        clock.calHitRate();
     }
 }

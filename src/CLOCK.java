@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CLOCK {
     /**
@@ -15,13 +13,12 @@ public class CLOCK {
      * 
      * 3.内存中存在页面n，,p不变，将页面n重置为n(1)（不管页面n之前使用位为1或0）
      */
-    private Set<Integer> set = new LinkedHashSet<>();
     private Double C = 0.0;
     private int Msize;
     private List<Integer> stream;
-    private CK[] c;
-    private ArrayList<CK> array;    //ArrayList的CK对象数组
-    private boolean exist;   //指令是否在内存中的标志
+    private CK[] c; //对象数组，每个对象保存对应的页面和状态
+    private ArrayList<CK> array; // ArrayList的CK对象数组
+    private boolean exist; // 指令是否在内存中的标志
 
     public CLOCK(List<Integer> stream, int Msize) {
         this.Msize = Msize;
@@ -35,34 +32,44 @@ public class CLOCK {
             exist = true;
             int zhiLing = stream.get(i);
             int yeMian = zhiLing / 10;
-            c[i] = new CK(yeMian,0);
+            c[i] = new CK(yeMian, 0);
             for (int j = 0; j < array.size(); j++) {
                 if (array.get(j).ym == yeMian) {
                     System.out.println("指令" + zhiLing + "已在内存,对应页面：" + yeMian);
-                    exist = false;  //命中，改变状态(跳过未命中的代码)
+                    exist = false; // 命中，改变状态(跳过未命中的代码)
                 }
             }
-            if(exist){  //未命中
+            if (exist) { // 未命中
                 C++;
-                if(array.size()==Msize){
-                    //执行调出操作
+                if (array.size() == Msize) {
+                    // 执行调出操作
                     for (int j = 0; j < array.size(); j++) {
-                        array.get(j).state = 1;
+                        if (array.get(j).state == 0) {
+                            System.out.println("页面" + array.get(j).ym + "调出,状态：" + array.get(j).state);
+                            array.remove(j);
+                            break;
+                        } else {
+                            for (int k = 0; k < array.size(); k++) {
+                                array.get(k).state = 0;
+                            }
+                            j = 0;
+                        }
                     }
-                    System.out.println("页面"+array.get(0).ym+"调出");
-                    array.remove(0);
                 }
-                array.add(c[i]);//否则未满Msize的个数，执行添加
-                System.out.println("页面"+c[i].ym+"调入");
+                c[i].state = 1;
+                array.add(c[i]);// 否则未满Msize的个数，执行添加
+                System.out.println("页面" + c[i].ym + "调入,状态：" + c[i].state);
             }
-            
         }
     }
 
-    public void test(){
+    /**
+     * 打印数组内各元素状态
+     */
+    public void show() {
         process();
         for (int i = 0; i < array.size(); i++) {
-            System.out.print(array.get(i).ym+"\t");
+            System.out.print(array.get(i).ym + "\t");
             System.out.print(array.get(i).state);
             System.out.println();
         }
@@ -81,7 +88,7 @@ class CK {
     public int ym;
     public int state;
 
-    public CK(int ym,int state) {
+    public CK(int ym, int state) {
         this.state = state;
         this.ym = ym;
     }
