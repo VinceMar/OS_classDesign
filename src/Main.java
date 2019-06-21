@@ -61,16 +61,27 @@ public class Main {
     public static void main(String[] args) {
         init();
         List<Integer> s = stream;
-        // show(s);
+        List<Integer> s2 = stream2;
+        // show(s2);
         LRU lru = new LRU(s, 3);
-        LFU lfu = new LFU(s, 3);
-        FIFO fifo = new FIFO(s, 3);
-        OPT opt = new OPT(s, 3);
-        CLOCK clock = new CLOCK(s, 3);
+        LRU lru1 = new LRU(s2, 3);
+        LFU lfu = new LFU(s2, 3);
+        LFU lfu1 = new LFU(s, 3);
+        FIFO fifo = new FIFO(s2, 3);
+        FIFO fifo1 = new FIFO(s, 3);
+        OPT opt = new OPT(s2, 3);
+        OPT opt1 = new OPT(s, 3);
+        CLOCK clock = new CLOCK(s2, 3);
+        CLOCK clock1 = new CLOCK(s, 3);
         // lru.calHitRate();
+        // lru1.calHitRate();
         // lfu.calHitRate();
+        // lfu1.calHitRate();
         // fifo.calHitRate();
+        // fifo1.calHitRate();
         // opt.calHitRate();
+        // opt1.calHitRate();
         clock.calHitRate();
+        clock1.calHitRate();
     }
 }

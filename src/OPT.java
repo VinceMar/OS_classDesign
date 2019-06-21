@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class OPT {
     private Set<Integer> set = new LinkedHashSet<>(); // 用于存储无序(存入和取出的顺序不一定相同)元素，值不能重复
-    private Double C = 0.0;; // 未命中次数
+    private Double C = 0.0; // 未命中次数
     private int Msize;
     private List<Integer> stream;
 
@@ -64,3 +64,8 @@ public class OPT {
         System.out.println("OPT : " + String.format("%.6f", c));
     }
 }
+
+
+
+
+
